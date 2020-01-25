@@ -25,6 +25,7 @@ namespace ALVR
         public const byte ALVR_DEVICE_SUBTYPE_OCULUS_MOBILE_GEARVR = 1;
         public const byte ALVR_DEVICE_SUBTYPE_OCULUS_MOBILE_GO = 2;
         public const byte ALVR_DEVICE_SUBTYPE_OCULUS_MOBILE_QUEST = 3;
+        //public const byte ALVR_DEVICE_SUBTYPE_OCULUS_MOBILE_HAND = 4;//A3
         public const byte ALVR_DEVICE_SUBTYPE_DAYDREAM_GENERIC = 1;
         public const byte ALVR_DEVICE_SUBTYPE_DAYDREAM_MIRAGE_SOLO = 2;
         public const byte ALVR_DEVICE_SUBTYPE_CARDBOARD_GENERIC = 1;

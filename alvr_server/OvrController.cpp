@@ -1,5 +1,73 @@
 #include "OvrController.h"
 
+// Left hand open gesture transformation, thanks to https://github.com/spayne and his soft_knuckles repository
+extern const vr::VRBoneTransform_t g_openHandGesture[31U] = {
+	{ { 0.000000f, 0.000000f, 0.000000f, 1.000000f }, { 1.000000f, -0.000000f, -0.000000f, 0.000000f } },
+	{ { -0.034038f, 0.036503f, 0.164722f, 1.000000f }, { -0.055147f, -0.078608f, -0.920279f, 0.379296f } },
+	{ { -0.012083f, 0.028070f, 0.025050f, 1.000000f }, { 0.464112f, 0.567418f, 0.272106f, 0.623374f } },
+	{ { 0.040406f, 0.000000f, -0.000000f, 1.000000f }, { 0.994838f, 0.082939f, 0.019454f, 0.055130f } },
+	{ { 0.032517f, 0.000000f, 0.000000f, 1.000000f }, { 0.974793f, -0.003213f, 0.021867f, -0.222015f } },
+	{ { 0.030464f, -0.000000f, -0.000000f, 1.000000f }, { 1.000000f, -0.000000f, -0.000000f, 0.000000f } },
+	{ { 0.000632f, 0.026866f, 0.015002f, 1.000000f }, { 0.644251f, 0.421979f, -0.478202f, 0.422133f } },
+	{ { 0.074204f, -0.005002f, 0.000234f, 1.000000f }, { 0.995332f, 0.007007f, -0.039124f, 0.087949f } },
+	{ { 0.043930f, -0.000000f, -0.000000f, 1.000000f }, { 0.997891f, 0.045808f, 0.002142f, -0.045943f } },
+	{ { 0.028695f, 0.000000f, 0.000000f, 1.000000f }, { 0.999649f, 0.001850f, -0.022782f, -0.013409f } },
+	{ { 0.022821f, 0.000000f, -0.000000f, 1.000000f }, { 1.000000f, -0.000000f, 0.000000f, -0.000000f } },
+	{ { 0.002177f, 0.007120f, 0.016319f, 1.000000f }, { 0.546723f, 0.541276f, -0.442520f, 0.460749f } },
+	{ { 0.070953f, 0.000779f, 0.000997f, 1.000000f }, { 0.980294f, -0.167261f, -0.078959f, 0.069368f } },
+	{ { 0.043108f, 0.000000f, 0.000000f, 1.000000f }, { 0.997947f, 0.018493f, 0.013192f, 0.059886f } },
+	{ { 0.033266f, 0.000000f, 0.000000f, 1.000000f }, { 0.997394f, -0.003328f, -0.028225f, -0.066315f } },
+	{ { 0.025892f, -0.000000f, 0.000000f, 1.000000f }, { 0.999195f, -0.000000f, 0.000000f, 0.040126f } },
+	{ { 0.000513f, -0.006545f, 0.016348f, 1.000000f }, { 0.516692f, 0.550143f, -0.495548f, 0.429888f } },
+	{ { 0.065876f, 0.001786f, 0.000693f, 1.000000f }, { 0.990420f, -0.058696f, -0.101820f, 0.072495f } },
+	{ { 0.040697f, 0.000000f, 0.000000f, 1.000000f }, { 0.999545f, -0.002240f, 0.000004f, 0.030081f } },
+	{ { 0.028747f, -0.000000f, -0.000000f, 1.000000f }, { 0.999102f, -0.000721f, -0.012693f, 0.040420f } },
+	{ { 0.022430f, -0.000000f, 0.000000f, 1.000000f }, { 1.000000f, 0.000000f, 0.000000f, 0.000000f } },
+	{ { -0.002478f, -0.018981f, 0.015214f, 1.000000f }, { 0.526918f, 0.523940f, -0.584025f, 0.326740f } },
+	{ { 0.062878f, 0.002844f, 0.000332f, 1.000000f }, { 0.986609f, -0.059615f, -0.135163f, 0.069132f } },
+	{ { 0.030220f, 0.000000f, 0.000000f, 1.000000f }, { 0.994317f, 0.001896f, -0.000132f, 0.106446f } },
+	{ { 0.018187f, 0.000000f, 0.000000f, 1.000000f }, { 0.995931f, -0.002010f, -0.052079f, -0.073526f } },
+	{ { 0.018018f, 0.000000f, -0.000000f, 1.000000f }, { 1.000000f, 0.000000f, 0.000000f, 0.000000f } },
+	{ { -0.006059f, 0.056285f, 0.060064f, 1.000000f }, { 0.737238f, 0.202745f, 0.594267f, 0.249441f } },
+	{ { -0.040416f, -0.043018f, 0.019345f, 1.000000f }, { -0.290331f, 0.623527f, -0.663809f, -0.293734f } },
+	{ { -0.039354f, -0.075674f, 0.047048f, 1.000000f }, { -0.187047f, 0.678062f, -0.659285f, -0.265683f } },
+	{ { -0.038340f, -0.090987f, 0.082579f, 1.000000f }, { -0.183037f, 0.736793f, -0.634757f, -0.143936f } },
+	{ { -0.031806f, -0.087214f, 0.121015f, 1.000000f }, { -0.003659f, 0.758407f, -0.639342f, -0.126678f } }
+};
+extern const vr::VRBoneTransform_t handRestPose[31U] = {
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+	{ { 0, 0, 0, 1 }, { 0, 0, 0, 0 } },
+};
+
 
 
 OvrController::OvrController(bool isLeftHand, int index)
@@ -92,7 +160,7 @@ vr::EVRInitError OvrController::Activate(vr::TrackedDeviceIndex_t unObjectId)
 		vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/b/click", &m_handles[ALVR_INPUT_B_CLICK]);
 		vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/b/touch", &m_handles[ALVR_INPUT_B_TOUCH]);
 
-		//vr::VRDriverInput()->CreateSkeletonComponent(m_ulPropertyContainer, "/input/skeleton/right", "/skeleton/hand/right", "/pose/raw", nullptr, SKELTON_BONE_COUNT, &m_compSkeleton);
+		vr::VRDriverInput()->CreateSkeletonComponent(m_ulPropertyContainer, "/input/skeleton/right", "/skeleton/hand/right", "/pose/raw", vr::EVRSkeletalTrackingLevel::VRSkeletalTracking_Full, nullptr, 0U, &m_compSkeleton);
 	}
 	else {
 		// X,Y for left hand.
@@ -101,7 +169,7 @@ vr::EVRInitError OvrController::Activate(vr::TrackedDeviceIndex_t unObjectId)
 		vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/y/click", &m_handles[ALVR_INPUT_Y_CLICK]);
 		vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/y/touch", &m_handles[ALVR_INPUT_Y_TOUCH]);
 
-		//vr::VRDriverInput()->CreateSkeletonComponent(m_ulPropertyContainer, "/input/skeleton/left", "/skeleton/hand/left", "/pose/raw", nullptr, SKELTON_BONE_COUNT, &m_compSkeleton);
+		vr::VRDriverInput()->CreateSkeletonComponent(m_ulPropertyContainer, "/input/skeleton/left", "/skeleton/hand/left", "/pose/raw", vr::EVRSkeletalTrackingLevel::VRSkeletalTracking_Full, nullptr, 0U, &m_compSkeleton);
 	}
 
 	vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/joystick/click", &m_handles[ALVR_INPUT_JOYSTICK_CLICK]);
@@ -261,53 +329,115 @@ bool OvrController::onPoseUpdate(int controllerIndex, const TrackingInfo &info) 
 	auto& c = info.controller[controllerIndex];
 	Log(L"Controller%d %d %lu: %08llX %08X %f:%f", m_index,controllerIndex, (unsigned long)m_unObjectId, c.buttons, c.flags, c.trackpadPosition.x, c.trackpadPosition.y);
 
+	if (c.flags & TrackingInfo::Controller::FLAG_CONTROLLER_OCULUS_HAND) {
 
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_SYSTEM_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_SYSTEM_CLICK)) != 0, 0.0);
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_APPLICATION_MENU_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_APPLICATION_MENU_CLICK)) != 0, 0.0);
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GRIP_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_GRIP_CLICK)) != 0, 0.0);
-	vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_GRIP_VALUE], c.gripValue, 0.0);
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GRIP_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_GRIP_TOUCH)) != 0, 0.0);
+		if (!m_isLeftHand) {
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_TRIGGER_CLICK], (c.inputStateStatus & alvrInputStateHandStatus_IndexPinching) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GRIP_CLICK], (c.inputStateStatus & alvrInputStateHandStatus_MiddlePinching) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_SYSTEM_CLICK], (c.inputStateStatus & alvrInputStateHandStatus_RingPinching) != 0, 0.0);
+		}
+		else {
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_TRIGGER_CLICK], (c.inputStateStatus & alvrInputStateHandStatus_IndexPinching) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GRIP_CLICK], (c.inputStateStatus & alvrInputStateHandStatus_MiddlePinching) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_SYSTEM_CLICK], (c.inputStateStatus & alvrInputStateHandStatus_RingPinching) != 0, 0.0);
+		}
+		//Hand
+		for (size_t i = 0U; i < HSB_Count; i++) m_boneTransform[i] = handRestPose[i];
+#define COPY4(a,b) do{b.w=a.w;b.x=a.x;b.y=a.y;b.z=a.z;}while(0)
+#define ADD4(a,b) do{b.w+=a.w;b.x+=a.x;b.y+=a.y;b.z+=a.z;}while(0)
+#define COPY3(a,b) do{b.v[0]=a.x;b.v[1]=a.y;b.v[2]=a.z;}while(0)
+#define SIZE4(b) (sqrt(b.v[0]*b.v[0]+b.v[1]*b.v[1]+b.v[2]*b.v[2]))
+#define APPSIZE4(a,b,c) do{a.v[0]*=b/c;a.v[1]*=b/c;a.v[2]*=b/c;}while(0)
 
+		COPY4(c.orientation, m_boneTransform[HSB_Root].orientation);
+		COPY4(c.boneRotations[alvrHandBone_WristRoot], m_boneTransform[HSB_Wrist].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Thumb0], m_boneTransform[HSB_Thumb0].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Thumb1], m_boneTransform[HSB_Thumb1].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Thumb2], m_boneTransform[HSB_Thumb2].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Thumb3], m_boneTransform[HSB_Thumb3].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Index1], m_boneTransform[HSB_IndexFinger1].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Index2], m_boneTransform[HSB_IndexFinger2].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Index3], m_boneTransform[HSB_IndexFinger3].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Middle1], m_boneTransform[HSB_MiddleFinger1].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Middle2], m_boneTransform[HSB_MiddleFinger2].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Middle3], m_boneTransform[HSB_MiddleFinger3].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Ring1], m_boneTransform[HSB_RingFinger1].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Ring2], m_boneTransform[HSB_RingFinger2].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Ring3], m_boneTransform[HSB_RingFinger3].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Pinky0], m_boneTransform[HSB_PinkyFinger0].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Pinky1], m_boneTransform[HSB_PinkyFinger1].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Pinky2], m_boneTransform[HSB_PinkyFinger2].orientation);
+		COPY4(c.boneRotations[alvrHandBone_Pinky3], m_boneTransform[HSB_PinkyFinger3].orientation);
 
-	if (!m_isLeftHand) {
-		// A,B for right hand.
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_A_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_A_CLICK)) != 0, 0.0);
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_A_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_A_TOUCH)) != 0, 0.0);
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_B_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_B_CLICK)) != 0, 0.0);
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_B_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_B_TOUCH)) != 0, 0.0);
+		COPY3(c.position, m_boneTransform[HSB_Root].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_WristRoot], m_boneTransform[HSB_Wrist].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Thumb0], m_boneTransform[HSB_Thumb0].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Thumb1], m_boneTransform[HSB_Thumb1].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Thumb2], m_boneTransform[HSB_Thumb2].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Thumb3], m_boneTransform[HSB_Thumb3].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Index1], m_boneTransform[HSB_IndexFinger1].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Index2], m_boneTransform[HSB_IndexFinger2].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Index3], m_boneTransform[HSB_IndexFinger3].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Middle1], m_boneTransform[HSB_MiddleFinger1].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Middle2], m_boneTransform[HSB_MiddleFinger2].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Middle3], m_boneTransform[HSB_MiddleFinger3].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Ring1], m_boneTransform[HSB_RingFinger1].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Ring2], m_boneTransform[HSB_RingFinger2].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Ring3], m_boneTransform[HSB_RingFinger3].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Pinky0], m_boneTransform[HSB_PinkyFinger0].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Pinky1], m_boneTransform[HSB_PinkyFinger1].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Pinky2], m_boneTransform[HSB_PinkyFinger2].position);
+		COPY3(c.bonePositionsBase[alvrHandBone_Pinky3], m_boneTransform[HSB_PinkyFinger3].position);
 
+		vr::VRDriverInput()->UpdateSkeletonComponent(m_compSkeleton, vr::VRSkeletalMotionRange_WithController, m_boneTransform, HSB_Count);
+		vr::VRDriverInput()->UpdateSkeletonComponent(m_compSkeleton, vr::VRSkeletalMotionRange_WithoutController, m_boneTransform, HSB_Count);
+
+		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, m_pose, sizeof(vr::DriverPose_t));
 	}
 	else {
-		// X,Y for left hand.
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_X_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_X_CLICK)) != 0, 0.0);
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_X_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_X_TOUCH)) != 0, 0.0);
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_Y_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_Y_CLICK)) != 0, 0.0);
-		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_Y_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_Y_TOUCH)) != 0, 0.0);
+
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_SYSTEM_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_SYSTEM_CLICK)) != 0, 0.0);
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_APPLICATION_MENU_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_APPLICATION_MENU_CLICK)) != 0, 0.0);
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GRIP_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_GRIP_CLICK)) != 0, 0.0);
+		vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_GRIP_VALUE], c.gripValue, 0.0);
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GRIP_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_GRIP_TOUCH)) != 0, 0.0);
+
+
+		if (!m_isLeftHand) {
+			// A,B for right hand.
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_A_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_A_CLICK)) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_A_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_A_TOUCH)) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_B_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_B_CLICK)) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_B_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_B_TOUCH)) != 0, 0.0);
+
+		}
+		else {
+			// X,Y for left hand.
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_X_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_X_CLICK)) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_X_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_X_TOUCH)) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_Y_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_Y_CLICK)) != 0, 0.0);
+			vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_Y_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_Y_TOUCH)) != 0, 0.0);
+		}
+
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_JOYSTICK_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_JOYSTICK_CLICK)) != 0, 0.0);
+		vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_JOYSTICK_X], c.trackpadPosition.x, 0.0);
+		vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_JOYSTICK_Y], c.trackpadPosition.y, 0.0);
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_JOYSTICK_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_JOYSTICK_TOUCH)) != 0, 0.0);
+
+
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_BACK_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_BACK_CLICK)) != 0, 0.0);
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GUIDE_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_GUIDE_CLICK)) != 0, 0.0);
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_START_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_START_CLICK)) != 0, 0.0);
+
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_TRIGGER_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_TRIGGER_CLICK)) != 0, 0.0);
+		vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_TRIGGER_VALUE], c.triggerValue, 0.0);
+		vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_TRIGGER_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_TRIGGER_TOUCH)) != 0, 0.0);
+
+		// Battery
+		vr::VRProperties()->SetFloatProperty(m_ulPropertyContainer, vr::Prop_DeviceBatteryPercentage_Float, c.batteryPercentRemaining / 100.0f);
+
+		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, m_pose, sizeof(vr::DriverPose_t));
 	}
-
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_JOYSTICK_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_JOYSTICK_CLICK)) != 0, 0.0);
-	vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_JOYSTICK_X], c.trackpadPosition.x, 0.0);
-	vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_JOYSTICK_Y], c.trackpadPosition.y, 0.0);
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_JOYSTICK_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_JOYSTICK_TOUCH)) != 0, 0.0);
-
-
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_BACK_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_BACK_CLICK)) != 0, 0.0);
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_GUIDE_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_GUIDE_CLICK)) != 0, 0.0);
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_START_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_START_CLICK)) != 0, 0.0);
-
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_TRIGGER_CLICK], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_TRIGGER_CLICK)) != 0, 0.0);
-	vr::VRDriverInput()->UpdateScalarComponent(m_handles[ALVR_INPUT_TRIGGER_VALUE], c.triggerValue, 0.0);
-	vr::VRDriverInput()->UpdateBooleanComponent(m_handles[ALVR_INPUT_TRIGGER_TOUCH], (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_TRIGGER_TOUCH)) != 0, 0.0);
-
-
-	
-
-	// Battery
-	vr::VRProperties()->SetFloatProperty(m_ulPropertyContainer, vr::Prop_DeviceBatteryPercentage_Float, c.batteryPercentRemaining / 100.0f);
-	
-	vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, m_pose, sizeof(vr::DriverPose_t));
-
-
 	return false;
 }
 

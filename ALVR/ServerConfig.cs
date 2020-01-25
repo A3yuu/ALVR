@@ -192,18 +192,48 @@ namespace ALVR
                 driverConfig.disableController = c.disableController;
 
 
-               
-                driverConfig.controllerTrackingSystemName = "oculus";
-                driverConfig.controllerSerialNumber = "1WMGH000XX0000_Controller"; //requires _Left & _Right
-                driverConfig.controllerModelNumber = "Oculus Rift S"; //requires (Left Controller) & (Right Controller)
-                driverConfig.controllerManufacturerName = "Oculus";
-                driverConfig.controllerRenderModelNameLeft = "oculus_rifts_controller_left";
-                driverConfig.controllerRenderModelNameRight = "oculus_rifts_controller_right";
-                driverConfig.controllerRegisteredDeviceType = "oculus/1WMGH000XX0000_Controller"; //requires _Left & _Right
-                driverConfig.controllerInputProfilePath = "{oculus}/input/touch_profile.json";
-                driverConfig.controllerType = "oculus_touch";
-               
-                
+
+                //driverConfig.controllerTrackingSystemName = "oculus";
+                //driverConfig.controllerSerialNumber = "1WMGH000XX0000_Controller"; //requires _Left & _Right
+                //driverConfig.controllerModelNumber = "Oculus Rift S"; //requires (Left Controller) & (Right Controller)
+                //driverConfig.controllerManufacturerName = "Oculus";
+                //driverConfig.controllerRenderModelNameLeft = "oculus_rifts_controller_left";
+                //driverConfig.controllerRenderModelNameRight = "oculus_rifts_controller_right";
+                //driverConfig.controllerRegisteredDeviceType = "oculus/1WMGH000XX0000_Controller"; //requires _Left & _Right
+                //driverConfig.controllerInputProfilePath = "{oculus}/input/touch_profile.json";
+                //driverConfig.controllerType = "oculus_touch";
+
+                driverConfig.controllerTrackingSystemName = "ALVR Remote Controller";
+                driverConfig.controllerSerialNumber = "ALVR Remote Controller";
+                driverConfig.controllerModelNumber = "ALVR Remote Controller";
+                driverConfig.controllerManufacturerName = "ALVR";
+                driverConfig.controllerRenderModelNameLeft = "index_controller";
+                driverConfig.controllerRenderModelNameRight = "index_controller";
+                driverConfig.controllerRegisteredDeviceType = "index_controller";
+                driverConfig.controllerInputProfilePath = "knuckles_profile.json";
+                driverConfig.controllerType = "knuckles";
+
+                //driverConfig.emulated_controller = "index";
+                //driverConfig.rightHand = true;
+                //driverConfig.leftHand = true;
+                //driverConfig.offsetX = 0.0f;
+                //driverConfig.offsetY = 0.0f;
+                //driverConfig.offsetZ = 0.0f;
+                //driverConfig.trackingLevel = "full";
+                //driverConfig.input = true;
+                //driverConfig.menu = true;
+                //driverConfig.appMenu = true;
+                //driverConfig.trigger = true;
+                //driverConfig.grip = true;
+                //driverConfig.touchpad = true;
+                //driverConfig.touchpadTouch = true;
+                //driverConfig.touchpadPress = true;
+                //driverConfig.touchpadAxes = true;
+                //driverConfig.buttonA = true;
+                //driverConfig.buttonB = true;
+                //driverConfig.thumbstick = true;
+
+
                 driverConfig.controllerTriggerMode = c.controllerTriggerMode;
                 driverConfig.controllerTrackpadClickMode = c.controllerTrackpadClickMode;
                 driverConfig.controllerTrackpadTouchMode = c.controllerTrackpadTouchMode;
