@@ -115,8 +115,14 @@ enum ALVR_INPUT {
 	ALVR_INPUT_TRACKPAD_Y,
 	ALVR_INPUT_TRACKPAD_CLICK,
 	ALVR_INPUT_TRACKPAD_TOUCH,
+	ALVR_INPUT_FINGER_INDEX,
+	ALVR_INPUT_FINGER_MIDDLE,
+	ALVR_INPUT_FINGER_RING,
+	ALVR_INPUT_FINGER_PINKY,
+	ALVR_INPUT_GRIP_FORCE,
+	ALVR_INPUT_TRACKPAD_FORCE,
 
-	ALVR_INPUT_MAX = ALVR_INPUT_TRACKPAD_TOUCH,
+	ALVR_INPUT_MAX = ALVR_INPUT_TRACKPAD_FORCE,
 	ALVR_INPUT_COUNT = ALVR_INPUT_MAX + 1
 };
 enum ALVR_HAND {
@@ -271,8 +277,10 @@ struct TrackingInfo {
 
 		// Tracking info of hand. A3
 		TrackingQuat boneRotations[alvrHandBone_MaxSkinnable];
-		TrackingQuat boneRotationsBase[alvrHandBone_MaxSkinnable];
+		//TrackingQuat boneRotationsBase[alvrHandBone_MaxSkinnable];
 		TrackingVector3 bonePositionsBase[alvrHandBone_MaxSkinnable];
+		TrackingQuat boneRootOrientation;
+		TrackingVector3 boneRootPosition;
 		uint32_t inputStateStatus;
 	} controller[2];
 };

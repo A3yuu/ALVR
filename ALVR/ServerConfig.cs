@@ -203,14 +203,24 @@ namespace ALVR
                 //driverConfig.controllerInputProfilePath = "{oculus}/input/touch_profile.json";
                 //driverConfig.controllerType = "oculus_touch";
 
-                driverConfig.controllerTrackingSystemName = "ALVR Remote Controller";
+                //driverConfig.controllerTrackingSystemName = "ALVR Remote Controller";
+                //driverConfig.controllerSerialNumber = "ALVR Remote Controller";
+                //driverConfig.controllerModelNumber = "ALVR Remote Controller";
+                //driverConfig.controllerManufacturerName = "ALVR";
+                //driverConfig.controllerRenderModelNameLeft = "valve_controller_knu_ev2_0_left";
+                //driverConfig.controllerRenderModelNameRight = "valve_controller_knu_ev2_0_right";
+                //driverConfig.controllerRegisteredDeviceType = "soft_knuckles";
+                //driverConfig.controllerInputProfilePath = "{alvr_server}/input/soft_knuckles_profile.json";
+                //driverConfig.controllerType = "soft_knuckles";
+
+                driverConfig.controllerTrackingSystemName = "indexcontroller";
                 driverConfig.controllerSerialNumber = "ALVR Remote Controller";
                 driverConfig.controllerModelNumber = "ALVR Remote Controller";
-                driverConfig.controllerManufacturerName = "ALVR";
-                driverConfig.controllerRenderModelNameLeft = "index_controller";
-                driverConfig.controllerRenderModelNameRight = "index_controller";
-                driverConfig.controllerRegisteredDeviceType = "index_controller";
-                driverConfig.controllerInputProfilePath = "knuckles_profile.json";
+                driverConfig.controllerManufacturerName = "Valve";
+                driverConfig.controllerRenderModelNameLeft = "valve_controller_knu_ev2_0_left";
+                driverConfig.controllerRenderModelNameRight = "valve_controller_knu_ev2_0_right";
+                driverConfig.controllerRegisteredDeviceType = "valve/index_controllerLHR-E217CD00"; //requires _Left & _Right
+                driverConfig.controllerInputProfilePath = "{indexcontroller}/input/index_controller_profile.json";
                 driverConfig.controllerType = "knuckles";
 
                 //driverConfig.emulated_controller = "index";
