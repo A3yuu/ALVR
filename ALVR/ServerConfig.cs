@@ -203,16 +203,6 @@ namespace ALVR
                 //driverConfig.controllerInputProfilePath = "{oculus}/input/touch_profile.json";
                 //driverConfig.controllerType = "oculus_touch";
 
-                //driverConfig.controllerTrackingSystemName = "ALVR Remote Controller";
-                //driverConfig.controllerSerialNumber = "ALVR Remote Controller";
-                //driverConfig.controllerModelNumber = "ALVR Remote Controller";
-                //driverConfig.controllerManufacturerName = "ALVR";
-                //driverConfig.controllerRenderModelNameLeft = "valve_controller_knu_ev2_0_left";
-                //driverConfig.controllerRenderModelNameRight = "valve_controller_knu_ev2_0_right";
-                //driverConfig.controllerRegisteredDeviceType = "soft_knuckles";
-                //driverConfig.controllerInputProfilePath = "{alvr_server}/input/soft_knuckles_profile.json";
-                //driverConfig.controllerType = "soft_knuckles";
-
                 driverConfig.controllerTrackingSystemName = "indexcontroller";
                 driverConfig.controllerSerialNumber = "ALVR Remote Controller";
                 driverConfig.controllerModelNumber = "ALVR Remote Controller";
@@ -222,26 +212,6 @@ namespace ALVR
                 driverConfig.controllerRegisteredDeviceType = "valve/index_controllerLHR-E217CD00"; //requires _Left & _Right
                 driverConfig.controllerInputProfilePath = "{indexcontroller}/input/index_controller_profile.json";
                 driverConfig.controllerType = "knuckles";
-
-                //driverConfig.emulated_controller = "index";
-                //driverConfig.rightHand = true;
-                //driverConfig.leftHand = true;
-                //driverConfig.offsetX = 0.0f;
-                //driverConfig.offsetY = 0.0f;
-                //driverConfig.offsetZ = 0.0f;
-                //driverConfig.trackingLevel = "full";
-                //driverConfig.input = true;
-                //driverConfig.menu = true;
-                //driverConfig.appMenu = true;
-                //driverConfig.trigger = true;
-                //driverConfig.grip = true;
-                //driverConfig.touchpad = true;
-                //driverConfig.touchpadTouch = true;
-                //driverConfig.touchpadPress = true;
-                //driverConfig.touchpadAxes = true;
-                //driverConfig.buttonA = true;
-                //driverConfig.buttonB = true;
-                //driverConfig.thumbstick = true;
 
 
                 driverConfig.controllerTriggerMode = c.controllerTriggerMode;
